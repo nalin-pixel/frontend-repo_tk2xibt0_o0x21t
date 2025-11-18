@@ -1,38 +1,43 @@
-import React, { Suspense, useEffect, useState } from "react"
+import React, { useEffect, useMemo, useRef, useState } from "react"
 import { motion } from "framer-motion"
 
-// Lazy load Spline to avoid mount-time side effects causing remount/unmount flicker
-const LazySpline = React.lazy(() => import("@splinetool/react-spline"))
-
 function SplineCanvas() {
-  const [showFallback, setShowFallback] = useState(false)
+  const [SplineComp, setSplineComp] = useState(null)
+  const [loadError, setLoadError] = useState(false)
   const [ready, setReady] = useState(false)
+  const [showImageFallback, setShowImageFallback] = useState(false)
+  const timeoutRef = useRef(null)
 
-  // If Spline takes too long or errors, show a graceful fallback
   useEffect(() => {
-    const t = setTimeout(() => setShowFallback(true), 1500)
-    return () => clearTimeout(t)
-  }, [])
+    // Start a soft timeout to reveal an image fallback if the 3D scene is slow
+    timeoutRef.current = setTimeout(() => {
+      if (!ready) setShowImageFallback(true)
+    }, 1500)
+
+    // Dynamically import Spline without throwing during render
+    import("@splinetool/react-spline")
+      .then((mod) => {
+        setSplineComp(() => mod.default)
+      })
+      .catch(() => {
+        setLoadError(true)
+        setShowImageFallback(true)
+      })
+
+    return () => {
+      if (timeoutRef.current) clearTimeout(timeoutRef.current)
+    }
+  }, [ready])
+
+  const sceneUrl = useMemo(
+    () => "https://prod.spline.design/7b0kGufX0pTt6Y1m/scene.splinecode",
+    []
+  )
 
   return (
     <div className="absolute inset-0 opacity-90 [mask-image:radial-gradient(white,transparent_85%)]">
-      {!showFallback && (
-        <Suspense
-          fallback={
-            <div className="absolute inset-0 grid place-items-center">
-              <div className="h-12 w-12 animate-pulse rounded-full bg-blue-200" />
-            </div>
-          }
-        >
-          <LazySpline
-            scene="https://prod.spline.design/7b0kGufX0pTt6Y1m/scene.splinecode"
-            onLoad={() => setReady(true)}
-            onError={() => setShowFallback(true)}
-          />
-        </Suspense>
-      )}
-
-      {(showFallback && !ready) && (
+      {/* Fallback image layer (shows only if slow or error and not yet ready) */}
+      {(showImageFallback || loadError) && !ready && (
         <div className="absolute inset-0 overflow-hidden">
           <img
             src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=1200&auto=format&fit=crop"
@@ -40,6 +45,30 @@ function SplineCanvas() {
             className="h-full w-full object-cover opacity-90"
           />
           <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(350px_120px_at_80%_20%,rgba(59,130,246,0.15),transparent),radial-gradient(400px_160px_at_20%_90%,rgba(59,130,246,0.12),transparent)]" />
+        </div>
+      )}
+
+      {/* 3D layer (does not unmount once shown) */}
+      {SplineComp && (
+        <div className="absolute inset-0">
+          <SplineComp
+            scene={sceneUrl}
+            onLoad={() => {
+              setReady(true)
+              if (timeoutRef.current) clearTimeout(timeoutRef.current)
+            }}
+            onError={() => {
+              setLoadError(true)
+              setShowImageFallback(true)
+            }}
+          />
+        </div>
+      )}
+
+      {/* Tiny loader dot while 3D is initializing and before fallback kicks in */}
+      {!ready && !showImageFallback && !loadError && (
+        <div className="absolute inset-0 grid place-items-center">
+          <div className="h-12 w-12 animate-pulse rounded-full bg-blue-200" />
         </div>
       )}
     </div>
