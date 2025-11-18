@@ -5,13 +5,12 @@ import App from './App'
 import Test from './Test'
 import './index.css'
 
+// Note: Avoid StrictMode in dev to prevent double-mount side effects from some 3D/animation libs
 ReactDOM.createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<App />} />
-        <Route path="/test" element={<Test />} />
-      </Routes>
-    </BrowserRouter>
-  </React.StrictMode>,
+  <BrowserRouter>
+    <Routes>
+      <Route path="/" element={<App />} />
+      <Route path="/test" element={<Test />} />
+    </Routes>
+  </BrowserRouter>,
 )
