@@ -1,6 +1,19 @@
 import React, { useEffect, useMemo, useRef, useState } from "react"
 import { motion } from "framer-motion"
 
+function ImageFallbackLayer() {
+  return (
+    <div className="absolute inset-0 overflow-hidden">
+      <img
+        src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=1200&auto=format&fit=crop"
+        alt="Product preview"
+        className="h-full w-full object-cover opacity-90"
+      />
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(350px_120px_at_80%_20%,rgba(59,130,246,0.15),transparent),radial-gradient(400px_160px_at_20%_90%,rgba(59,130,246,0.12),transparent)]" />
+    </div>
+  )
+}
+
 function SplineCanvas() {
   const [SplineComp, setSplineComp] = useState(null)
   const [loadError, setLoadError] = useState(false)
@@ -9,12 +22,10 @@ function SplineCanvas() {
   const timeoutRef = useRef(null)
 
   useEffect(() => {
-    // Start a soft timeout to reveal an image fallback if the 3D scene is slow
     timeoutRef.current = setTimeout(() => {
       if (!ready) setShowImageFallback(true)
     }, 1500)
 
-    // Dynamically import Spline without throwing during render
     import("@splinetool/react-spline")
       .then((mod) => {
         setSplineComp(() => mod.default)
@@ -36,19 +47,8 @@ function SplineCanvas() {
 
   return (
     <div className="absolute inset-0 opacity-90 [mask-image:radial-gradient(white,transparent_85%)]">
-      {/* Fallback image layer (shows only if slow or error and not yet ready) */}
-      {(showImageFallback || loadError) && !ready && (
-        <div className="absolute inset-0 overflow-hidden">
-          <img
-            src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=1200&auto=format&fit=crop"
-            alt="Product preview"
-            className="h-full w-full object-cover opacity-90"
-          />
-          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(350px_120px_at_80%_20%,rgba(59,130,246,0.15),transparent),radial-gradient(400px_160px_at_20%_90%,rgba(59,130,246,0.12),transparent)]" />
-        </div>
-      )}
+      {(showImageFallback || loadError) && !ready && <ImageFallbackLayer />}
 
-      {/* 3D layer (does not unmount once shown) */}
       {SplineComp && (
         <div className="absolute inset-0">
           <SplineComp
@@ -65,7 +65,6 @@ function SplineCanvas() {
         </div>
       )}
 
-      {/* Tiny loader dot while 3D is initializing and before fallback kicks in */}
       {!ready && !showImageFallback && !loadError && (
         <div className="absolute inset-0 grid place-items-center">
           <div className="h-12 w-12 animate-pulse rounded-full bg-blue-200" />
@@ -76,9 +75,10 @@ function SplineCanvas() {
 }
 
 export default function Hero() {
+  const enable3D = import.meta.env.VITE_ENABLE_3D === "true"
+
   return (
     <section className="relative overflow-hidden">
-      {/* background gloss */}
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(600px_circle_at_20%_10%,rgba(59,130,246,0.15),transparent),radial-gradient(700px_500px_at_80%_20%,rgba(14,165,233,0.13),transparent)]" />
 
       <div className="mx-auto grid max-w-7xl items-center gap-10 px-6 pb-24 pt-16 md:grid-cols-2 md:gap-16">
@@ -141,14 +141,18 @@ export default function Hero() {
           </div>
         </div>
 
-        {/* 3D illustrative canvas */}
         <div className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl border border-slate-200/70 bg-gradient-to-b from-white to-blue-50 shadow-xl">
-          <SplineCanvas />
-          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(350px_120px_at_80%_20%,rgba(59,130,246,0.15),transparent),radial-gradient(400px_160px_at_20%_90%,rgba(59,130,246,0.12),transparent)]" />
+          {enable3D ? (
+            <>
+              <SplineCanvas />
+              <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(350px_120px_at_80%_20%,rgba(59,130,246,0.15),transparent),radial-gradient(400px_160px_at_20%_90%,rgba(59,130,246,0.12),transparent)]" />
+            </>
+          ) : (
+            <ImageFallbackLayer />
+          )}
         </div>
       </div>
 
-      {/* wave divider */}
       <svg className="-mb-px w-full text-blue-50" viewBox="0 0 1440 80" preserveAspectRatio="none" fill="currentColor"><path d="M0 0h1440v40c-120 24-240 36-360 36S720 48 540 48 240 64 120 72 0 80 0 80z"/></svg>
     </section>
   )
