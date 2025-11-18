@@ -2,16 +2,28 @@ import Navbar from './components/Navbar'
 import Hero from './components/Hero'
 import Features from './components/Features'
 import Showcase from './components/Showcase'
+import Brands from './components/Brands'
+import Testimonials from './components/Testimonials'
+import Experiments from './components/Experiments'
 import CTA from './components/CTA'
+import Spotlight from './components/Spotlight'
+import ScrollProgress from './components/ScrollProgress'
+import FloatingDock from './components/FloatingDock'
 
 function App() {
   return (
     <div className="min-h-screen bg-white text-slate-900 bg-animated-diagonals">
+      <ScrollProgress />
+      <Spotlight />
       <Navbar />
       <Hero />
+      <Brands />
       <Features />
       <Showcase />
+      <Testimonials />
+      <Experiments />
       <CTA />
+      <FloatingDock />
       <footer className="bg-white/60 py-10">
         <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 px-6 sm:flex-row">
           <p className="text-sm text-slate-500">© {new Date().getFullYear()} InternAlly — built to reduce application burnout.</p>
