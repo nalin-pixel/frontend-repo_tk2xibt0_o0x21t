@@ -3,14 +3,17 @@ import ReactDOM from 'react-dom/client'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import App from './App'
 import Test from './Test'
+import ErrorBoundary from './ErrorBoundary'
 import './index.css'
 
-// Note: Avoid StrictMode in dev to prevent double-mount side effects from some 3D/animation libs
+// Render without StrictMode to avoid double-mount with certain libs
 ReactDOM.createRoot(document.getElementById('root')).render(
-  <BrowserRouter>
-    <Routes>
-      <Route path="/" element={<App />} />
-      <Route path="/test" element={<Test />} />
-    </Routes>
-  </BrowserRouter>,
+  <ErrorBoundary>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<App />} />
+        <Route path="/test" element={<Test />} />
+      </Routes>
+    </BrowserRouter>
+  </ErrorBoundary>
 )

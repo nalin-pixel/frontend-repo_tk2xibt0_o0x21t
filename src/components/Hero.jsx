@@ -1,5 +1,50 @@
-import Spline from "@splinetool/react-spline"
+import React, { Suspense, useEffect, useState } from "react"
 import { motion } from "framer-motion"
+
+// Lazy load Spline to avoid mount-time side effects causing remount/unmount flicker
+const LazySpline = React.lazy(() => import("@splinetool/react-spline"))
+
+function SplineCanvas() {
+  const [showFallback, setShowFallback] = useState(false)
+  const [ready, setReady] = useState(false)
+
+  // If Spline takes too long or errors, show a graceful fallback
+  useEffect(() => {
+    const t = setTimeout(() => setShowFallback(true), 1500)
+    return () => clearTimeout(t)
+  }, [])
+
+  return (
+    <div className="absolute inset-0 opacity-90 [mask-image:radial-gradient(white,transparent_85%)]">
+      {!showFallback && (
+        <Suspense
+          fallback={
+            <div className="absolute inset-0 grid place-items-center">
+              <div className="h-12 w-12 animate-pulse rounded-full bg-blue-200" />
+            </div>
+          }
+        >
+          <LazySpline
+            scene="https://prod.spline.design/7b0kGufX0pTt6Y1m/scene.splinecode"
+            onLoad={() => setReady(true)}
+            onError={() => setShowFallback(true)}
+          />
+        </Suspense>
+      )}
+
+      {(showFallback && !ready) && (
+        <div className="absolute inset-0 overflow-hidden">
+          <img
+            src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=1200&auto=format&fit=crop"
+            alt="Product preview"
+            className="h-full w-full object-cover opacity-90"
+          />
+          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(350px_120px_at_80%_20%,rgba(59,130,246,0.15),transparent),radial-gradient(400px_160px_at_20%_90%,rgba(59,130,246,0.12),transparent)]" />
+        </div>
+      )}
+    </div>
+  )
+}
 
 export default function Hero() {
   return (
@@ -69,9 +114,7 @@ export default function Hero() {
 
         {/* 3D illustrative canvas */}
         <div className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl border border-slate-200/70 bg-gradient-to-b from-white to-blue-50 shadow-xl">
-          <div className="absolute inset-0 opacity-90 [mask-image:radial-gradient(white,transparent_85%)]">
-            <Spline scene="https://prod.spline.design/7b0kGufX0pTt6Y1m/scene.splinecode" />
-          </div>
+          <SplineCanvas />
           <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(350px_120px_at_80%_20%,rgba(59,130,246,0.15),transparent),radial-gradient(400px_160px_at_20%_90%,rgba(59,130,246,0.12),transparent)]" />
         </div>
       </div>
