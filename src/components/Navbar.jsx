@@ -5,15 +5,15 @@ export default function Navbar() {
   return (
     <div className="relative">
       {/* soft top gradient */}
-      <div className="pointer-events-none absolute inset-x-0 -top-24 h-48 bg-gradient-to-b from-blue-600/20 to-transparent blur-2xl" />
+      <div className="pointer-events-none absolute inset-x-0 -top-24 h-48 bg-gradient-to-b from-violet-600/20 to-transparent blur-2xl" />
       <nav className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5">
         <div className="flex items-center gap-3">
           <div className="relative">
             <motion.div
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
+              initial={{ scale: 0.9, opacity: 0, rotate: -6 }}
+              animate={{ scale: 1, opacity: 1, rotate: 0 }}
               transition={{ type: "spring", stiffness: 120, damping: 14 }}
-              className="grid h-10 w-10 place-items-center rounded-xl bg-gradient-to-br from-blue-600 to-blue-400 text-white shadow-lg shadow-blue-500/30"
+              className="grid h-10 w-10 place-items-center rounded-xl bg-gradient-to-br from-violet-600 to-fuchsia-500 text-white shadow-lg shadow-fuchsia-500/30"
             >
               <Sparkles className="h-5 w-5" />
             </motion.div>
@@ -21,7 +21,7 @@ export default function Navbar() {
               initial={{ opacity: 0, y: -4 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4 }}
-              className="absolute -right-1 -top-1 h-3 w-3 rounded-full bg-white shadow-[0_0_0_3px_#1e293b] ring-2 ring-blue-400"
+              className="absolute -right-1 -top-1 h-3 w-3 rounded-full bg-white shadow-[0_0_0_3px_#1e293b] ring-2 ring-violet-400"
             />
           </div>
           <div className="leading-tight">
@@ -37,17 +37,24 @@ export default function Navbar() {
             "Tracker",
             "Cover Letters",
             "Company Research",
-          ].map((item) => (
-            <a key={item} href="#" className="text-sm font-medium text-slate-600 transition-colors hover:text-slate-900">
+          ].map((item, idx) => (
+            <motion.a
+              key={item}
+              href="#"
+              initial={{ opacity: 0, y: -6 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.05 * idx }}
+              className="text-sm font-medium text-slate-600 transition-colors hover:text-slate-900"
+            >
               {item}
-            </a>
+            </motion.a>
           ))}
         </div>
 
         <div className="flex items-center gap-3">
           <a
             href="#get-started"
-            className="hidden rounded-full bg-slate-900 px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-blue-500/20 transition hover:shadow-blue-500/30 md:inline-block"
+            className="hidden rounded-full bg-violet-600 px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-fuchsia-500/20 transition hover:bg-violet-700 md:inline-block"
           >
             Get Started
           </a>

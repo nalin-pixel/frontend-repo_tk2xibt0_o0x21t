@@ -20,8 +20,8 @@ const items = [
 
 export default function Showcase() {
   return (
-    <section id="demo" className="relative overflow-hidden bg-gradient-to-b from-blue-50 to-white py-24">
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(500px_200px_at_50%_0%,rgba(59,130,246,0.12),transparent)]" />
+    <section id="demo" className="relative overflow-hidden bg-gradient-to-b from-violet-50 to-white py-24">
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(500px_200px_at_50%_0%,rgba(168,85,247,0.12),transparent)]" />
       <div className="mx-auto max-w-7xl px-6">
         <div className="mx-auto max-w-2xl text-center">
           <motion.h2
@@ -42,14 +42,14 @@ export default function Showcase() {
           {items.map((card, i) => (
             <motion.div
               key={card.title}
-              initial={{ opacity: 0, y: 10 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              initial={{ opacity: 0, y: 10, rotate: i % 2 ? -1.2 : 1.2 }}
+              whileInView={{ opacity: 1, y: 0, rotate: 0 }}
               viewport={{ once: true }}
-              transition={{ delay: i * 0.05, duration: 0.5 }}
-              className="group relative overflow-hidden rounded-2xl border border-slate-200 bg-white"
+              transition={{ delay: i * 0.05, duration: 0.6, type: "spring", stiffness: 140, damping: 16 }}
+              className="group relative overflow-hidden rounded-2xl border border-slate-200 bg-white will-change-transform"
             >
               <div className="relative aspect-[4/3] w-full overflow-hidden">
-                <img src={card.img} alt="preview" className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
+                <img src={card.img} alt="preview" className="h-full w-full origin-center object-cover transition-transform duration-500 group-hover:scale-105 group-hover:skew-y-1" />
                 <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-slate-900/30 to-transparent" />
               </div>
               <div className="p-6">

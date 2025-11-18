@@ -9,7 +9,7 @@ function ImageFallbackLayer() {
         alt="Product preview"
         className="h-full w-full object-cover opacity-90"
       />
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(350px_120px_at_80%_20%,rgba(59,130,246,0.15),transparent),radial-gradient(400px_160px_at_20%_90%,rgba(59,130,246,0.12),transparent)]" />
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(350px_120px_at_80%_20%,rgba(168,85,247,0.15),transparent),radial-gradient(400px_160px_at_20%_90%,rgba(217,70,239,0.12),transparent)]" />
     </div>
   )
 }
@@ -67,7 +67,7 @@ function SplineCanvas() {
 
       {!ready && !showImageFallback && !loadError && (
         <div className="absolute inset-0 grid place-items-center">
-          <div className="h-12 w-12 animate-pulse rounded-full bg-blue-200" />
+          <div className="h-12 w-12 animate-pulse rounded-full bg-fuchsia-200" />
         </div>
       )}
     </div>
@@ -79,23 +79,23 @@ export default function Hero() {
 
   return (
     <section className="relative overflow-hidden">
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(600px_circle_at_20%_10%,rgba(59,130,246,0.15),transparent),radial-gradient(700px_500px_at_80%_20%,rgba(14,165,233,0.13),transparent)]" />
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(600px_circle_at_20%_10%,rgba(168,85,247,0.18),transparent),radial-gradient(700px_500px_at_80%_20%,rgba(217,70,239,0.13),transparent)]" />
 
       <div className="mx-auto grid max-w-7xl items-center gap-10 px-6 pb-24 pt-16 md:grid-cols-2 md:gap-16">
         <div className="relative">
           <motion.div
-            initial={{ y: 10, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
+            initial={{ y: 10, opacity: 0, skewX: -4 }}
+            animate={{ y: 0, opacity: 1, skewX: 0 }}
             transition={{ duration: 0.6 }}
-            className="inline-flex items-center gap-2 rounded-full border border-blue-200 bg-white/60 px-3 py-1 text-xs text-blue-700 backdrop-blur"
+            className="inline-flex items-center gap-2 rounded-full border border-fuchsia-200 bg-white/60 px-3 py-1 text-xs text-fuchsia-700 backdrop-blur"
           >
-            <span className="h-1.5 w-1.5 rounded-full bg-blue-500" />
+            <span className="h-1.5 w-1.5 rounded-full bg-violet-500" />
             InternAlly — AI-powered job search for students
           </motion.div>
 
           <motion.h1
-            initial={{ opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0, y: 8, skewY: 4 }}
+            animate={{ opacity: 1, y: 0, skewY: 0 }}
             transition={{ delay: 0.1, duration: 0.6 }}
             className="mt-5 bg-gradient-to-b from-slate-900 to-slate-700 bg-clip-text text-5xl font-extrabold leading-[1.05] text-transparent md:text-6xl"
           >
@@ -103,8 +103,8 @@ export default function Hero() {
           </motion.h1>
 
           <motion.p
-            initial={{ opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0, y: 8, skewX: 3 }}
+            animate={{ opacity: 1, y: 0, skewX: 0 }}
             transition={{ delay: 0.2, duration: 0.6 }}
             className="mt-5 max-w-xl text-lg leading-relaxed text-slate-600"
           >
@@ -112,14 +112,14 @@ export default function Hero() {
           </motion.p>
 
           <motion.div
-            initial={{ opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0, y: 8, rotate: -1 }}
+            animate={{ opacity: 1, y: 0, rotate: 0 }}
             transition={{ delay: 0.3, duration: 0.6 }}
             className="mt-8 flex flex-wrap items-center gap-3"
           >
             <a
               href="#get-started"
-              className="rounded-full bg-blue-600 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-blue-500/30 transition hover:bg-blue-700"
+              className="rounded-full bg-violet-600 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-fuchsia-500/30 transition hover:bg-violet-700"
             >
               Start free — no card
             </a>
@@ -141,11 +141,11 @@ export default function Hero() {
           </div>
         </div>
 
-        <div className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl border border-slate-200/70 bg-gradient-to-b from-white to-blue-50 shadow-xl">
+        <div className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl border border-slate-200/70 bg-gradient-to-b from-white to-violet-50 shadow-xl">
           {enable3D ? (
             <>
               <SplineCanvas />
-              <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(350px_120px_at_80%_20%,rgba(59,130,246,0.15),transparent),radial-gradient(400px_160px_at_20%_90%,rgba(59,130,246,0.12),transparent)]" />
+              <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(350px_120px_at_80%_20%,rgba(168,85,247,0.15),transparent),radial-gradient(400px_160px_at_20%_90%,rgba(217,70,239,0.12),transparent)]" />
             </>
           ) : (
             <ImageFallbackLayer />
@@ -153,7 +153,7 @@ export default function Hero() {
         </div>
       </div>
 
-      <svg className="-mb-px w-full text-blue-50" viewBox="0 0 1440 80" preserveAspectRatio="none" fill="currentColor"><path d="M0 0h1440v40c-120 24-240 36-360 36S720 48 540 48 240 64 120 72 0 80 0 80z"/></svg>
+      <svg className="-mb-px w-full text-violet-50" viewBox="0 0 1440 80" preserveAspectRatio="none" fill="currentColor"><path d="M0 0h1440v40c-120 24-240 36-360 36S720 48 540 48 240 64 120 72 0 80 0 80z"/></svg>
     </section>
   )
 }
